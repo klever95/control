@@ -11630,7 +11630,9 @@ var DetalleVentaService = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GLOBAL", function() { return GLOBAL; });
 var GLOBAL = {
-    url: 'http://localhost:3977/api/',
+    // url:'http://localhost:3977/api/',
+    //ip:'172.0.0.1'
+    url: 'http://142.93.52.175:3977/api/',
 };
 
 
