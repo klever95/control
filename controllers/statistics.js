@@ -203,15 +203,27 @@ async function getcompraventa(){
 
 //todos los productos
 
-function getproductos(req, res) {
-    DetalleVenta.find({}, {fk_producto: 1, _id:0}, (error,response) => {
-        if (error) return res.status(500).send({Message: 'Error al ejecutar la peticion...', error});
-        if (!response) return res.status(404).send({Message: 'Error al cargar ...'});
-        if (response.length == 0) return res.status(200).send({Message: 'No hay productos!'})
-        return res.status(200).send({Message: 'Lista de productos', producto: response});
-        })
-}
+// function getproductos(req, res) {
+//     DetalleVenta.find({}, {fk_producto: 1, _id:0}, 
+//          (error,response) => {
+//         if (error) return res.status(500).send({Message: 'Error al ejecutar la peticion...', error});
+//         if (!response) return res.status(404).send({Message: 'Error al cargar ...'});
+//         if (response.length == 0) return res.status(200).send({Message: 'No hay productos!'})
+//         return res.status(200).send({Message: 'Lista de productos', producto: response});
+//         })
+// }
 
+function getproductos(req, res) {
+    var id = req.params.id;
+    var detallefind = DetalleVenta.find();
+    detallefind.populate('fk_producto ').exec((error, response) => {
+        if (error)
+            return res.status(500).send({ Message: 'Error al ejectuar la peticion', Error: error });
+        if (!response || response.length <= 0)
+            return res.status(404).send({ Message: 'No existen detalle compra en el sistema' });
+        return res.status(200).send({ Message: 'detalle compra cargados!', venta: response });
+    })
+}
 
 module.exports = {
     getCounts,

@@ -53,40 +53,43 @@ function guardarDetalleVenta(req, res) {
     // kardex.kardex_saldos.saldo_cantidad = params.DetalleVenta; 
     // kardex.kardex_saldos.saldo_valor =  params.DetalleVenta;
 
-    kardex.kardex_promedio          = params.det_precioVentaActual;
+    //kardex.kardex_promedio          = params.det_precioVentaActual;
     var detalleMessage;
-    detalle.save((err, response)=> {
-        if (err) {
-            detalleMessage = { Message: 'Error al ejecutar la peticion', Error: err };
-            return console.error('Error al ejecutar la peticion', err);
-        } 
-        if (!response || response.length <=0) {
-            detalleMessage = { Message: 'No se pudo ingresar' };
-            return console.info('No existe');
-        }
-        if (response){
-            detalleMessage = { Message: 'Datos Guardados'};
-            var id = response.fk_producto;
-            Producto.findById(id, (err, responseProducto)=> {
-                if (responseProducto) {
-                    var stockSig = responseProducto.prod_stock - params.det_unidades ;
-                    Producto.findByIdAndUpdate(responseProducto._id, {prod_stock: stockSig}, {new:true}, (err, responseStock)=>{
-                    if (responseStock) {
-                         console.log('guardado?');
-                         kardex.save((errKardex, responseKardex) => {
-                             console.log('guardando kardex');
-                             
-                             if (errKardex) return console.log(errKardex);
-                             if (!responseKardex)return  console.log(kardex);
-                              return console.log(responseKardex);
-                         });
+   // if(kardex.fk_producto && kardex.fk_producto != ''){
+        detalle.save((err, response)=> {
+            if (err) {
+                detalleMessage = { Message: 'Error al ejecutar la peticion', Error: err };
+                return console.error('Error al ejecutar la peticion', err);
+            } 
+            if (!response || response.length <=0) {
+                detalleMessage = { Message: 'No se pudo ingresar' };
+                return console.info('No existe');
+            }
+            if (response){
+                detalleMessage = { Message: 'Datos Guardados'};
+                var id = response.fk_producto;
+                Producto.findById(id, (err, responseProducto)=> {
+                    if (responseProducto) {
+                        var stockSig = responseProducto.prod_stock - params.det_unidades ;
+                        Producto.findByIdAndUpdate(responseProducto._id, {prod_stock: stockSig}, {new:true}, (err, responseStock)=>{
+                        if (responseStock) {
+                             console.log('guardado?');
+                            //  kardex.save((errKardex, responseKardex) => {
+                            //      console.log('guardando kardex');
+                                 
+                            //      if (errKardex) return console.log(errKardex);
+                            //      if (!responseKardex &&responseKardex!='')return  console.log(kardex);
+                            //       return console.log(responseKardex);
+                            //  });
+                        }
+                        })
                     }
-                    })
-                }
-            })
-            return console.log('Datos Guardados');
-        }
-    });
+                })
+                return console.log('Datos Guardados');
+            }
+        });
+
+   // }
 
     return res.status(201).send({Message: detalleMessage});
 }

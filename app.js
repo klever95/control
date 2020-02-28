@@ -3,6 +3,7 @@
 var express             = require('express');
 var bodyParser          = require('body-parser');
 var app                 = express();
+var path                = require('path');
 //cargar rutas
 var usuario_router      = require('./routes/usuario');
 var producto_router     = require('./routes/producto');
@@ -20,8 +21,8 @@ var statistics_router   = require('./routes/statistics');
 var detalleVenta_router = require('./routes/detalleVenta');
 var kardex_router       = require('./routes/kardex');
 var inventario_router   = require('./routes/inventario');
-var numero_router       =require('./routes/numero-ventas');
-var configuracion_router=require('./routes/configuracion');
+var numero_router       = require('./routes/numero-ventas');
+var configuracion_router= require('./routes/configuracion');
 
 //configurara body parser
 app.use(bodyParser.urlencoded({extended:false}));
@@ -34,6 +35,8 @@ app.use((req,res,next)=>{
     res.header('Allow','GET,POST,OPTIONS,PUT,DELETE');
     next();
 })
+app.use(express.static(path.join(__dirname,'client')));
+app.use('/',express.static('client',{redirect:false}))
 //carga de rutas base
 app.use('/api',usuario_router);
 app.use('/api',producto_router);
@@ -54,6 +57,8 @@ app.use('/api',inventario_router);
 app.use('/api',numero_router);
 app.use('/api',configuracion_router);
 
-//app.use(express.static(path.join(__dirname,'client')));
-//app.use('/',express.static('client',{redirect:false}))
+app.get('*', function(req, res, next) {
+    res.sendFile(path.resolve('client/index.html'));
+});
+
 module.exports=app;

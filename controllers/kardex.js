@@ -25,20 +25,22 @@ function guardarKardex(req,res){
     // kardex.saldo_cantida    =params.saldo_cantida;
     // kardex.saldo_valor      =params.saldo_valor;
     // kardex.kardex_promedi   =params.kardex_promedi;
-    kardex.save((err,kardexStored)=>{
-        if(err){
-            return console.log(err);
-        }
-        else{
-            if(!kardexStored){
-                return console.log('kardex no ingresado');
-                
+    //if(kardex.kardex_fk_producto && kardex.kardex_fk_producto != '') {
+        kardex.save((err,kardexStored)=>{
+            if(err){
+                return console.log(err);
             }
             else{
-               return console.log('kardex ingresado');
+                if(!kardexStored){
+                    return console.log('kardex no ingresado');
+                    
+                }
+                else{
+                   return console.log('kardex ingresado');
+                }
             }
-        }
-    });
+        });
+    //}
     return res.status(200).send({message: 'Kardex Ingresado',kardex:kardex});
 }
 
